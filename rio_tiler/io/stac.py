@@ -17,6 +17,7 @@ from ..errors import InvalidAssetName, MissingAssets
 from ..utils import aws_get_object
 from .base import BaseReader, MultiBaseReader
 from .cogeo import COGReader
+import planetary_computer
 
 DEFAULT_VALID_TYPE = {
     "image/tiff; application=geotiff",
@@ -222,5 +223,6 @@ class STACReader(MultiBaseReader):
         """
         if asset not in self.assets:
             raise InvalidAssetName(f"{asset} is not valid")
+        url = planetary_computer.sign(self.item.assets[asset].get_absolute_href())
 
-        return self.item.assets[asset].get_absolute_href()
+        return url
